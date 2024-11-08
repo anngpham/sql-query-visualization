@@ -2,6 +2,14 @@
 
 An interactive web application that helps users understand SQL queries through visual representations.
 
+![Database Schema Visualization](./public/sql-visualization-overview.jpg)
+
+This visualization shows the relationship between three main tables:
+
+- **Shipments**: Contains shipping information including dates, status, and tax
+- **Products**: Stores product details including name and price
+- **Orders**: Manages order information with quantities and pricing
+
 ## Features
 
 - Interactive SQL query visualization
