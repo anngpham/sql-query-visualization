@@ -5,7 +5,7 @@ import ELK from "elkjs/lib/elk.bundled.js";
 const GRAPH_ROOT_ID = "SAM_GRAPH";
 const DEFAULT_ELK_OPTIONS: LayoutOptions = {
   "elk.algorithm": "layered",
-  "elk.padding": "[left=0, top=40, right=0, bottom=0]",
+  "elk.padding": "[left=0, top=40, right=0, bottom=20]",
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
   "elk.layered.spacing.nodeNodeBetweenLayers": "100",
   "elk.separateConnectedComponents": "false",
