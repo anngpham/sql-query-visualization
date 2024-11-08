@@ -36,8 +36,6 @@ export default function Visualization({
   const [nodes, setNodes] = useState<FlowNode[]>([]);
   const [edges, setEdges] = useState<FlowEdge[]>([]);
 
-  // nodes[0].selected
-
   const getLayoutedFlow = async () => {
     // Build a map of node id to node (for quick lookup later)
     const nodeDataTable = nodeDataToMap(data.nodes);

@@ -7,9 +7,7 @@ const DEFAULT_ELK_OPTIONS: LayoutOptions = {
   "elk.algorithm": "layered",
   "elk.padding": "[left=0, top=40, right=0, bottom=0]",
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-  // "elk.edgeRouting": "ORTHOGONAL",
   "elk.layered.spacing.nodeNodeBetweenLayers": "100",
-  // "elk.spacing.nodeNode": "50",
   "elk.separateConnectedComponents": "false",
 };
 

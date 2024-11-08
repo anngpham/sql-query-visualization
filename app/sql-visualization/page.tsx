@@ -69,7 +69,7 @@ export default function Page() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch("/api/visualize", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

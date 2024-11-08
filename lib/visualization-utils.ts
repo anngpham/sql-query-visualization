@@ -12,6 +12,11 @@ export type IResponse = {
   }[];
 };
 
+/**
+ * Convert the response from the API to the data structure used by React Flow.
+ * @param response - The response from the API.
+ * @returns The data structure used by React Flow.
+ */
 export function convertResponseToVisualizationData(response: IResponse): {
   nodes: Node[];
   edges: Edge[];
