@@ -45,4 +45,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [Next.js](https://nextjs.org) - React framework for production
 - TypeScript for type safety
 - Tailwind CSS for styling
-- [Other relevant libraries/tools you're using]
+- [ReactFlow](https://reactflow.dev/) - A highly customizable library for building node-based editors and interactive diagrams
