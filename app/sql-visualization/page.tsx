@@ -22,6 +22,35 @@ const formSchema = z.object({
   sqlQuery: z.string(),
 });
 
+const languages = [
+  "athena",
+  "azuresql",
+  "bigquery",
+  "couchbase",
+  "databricks",
+  "db2",
+  "gaussdb",
+  "greenplum",
+  "hana",
+  "hive",
+  "impala",
+  "informix",
+  "mdx",
+  "mssql",
+  "mysql",
+  "netezza",
+  "openedge",
+  "oracle",
+  "postgresql",
+  "presto",
+  "redshift",
+  "snowflake",
+  "sparksql",
+  "sybase",
+  "teradata",
+  "vertica",
+];
+
 export default function Page() {
   const [visualizationData, setVisualizationData] = useState<{
     nodes: Node[];
@@ -85,9 +114,11 @@ export default function Page() {
                         <SelectValue placeholder="Select language" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="postgresql">PostgreSQL</SelectItem>
-                        <SelectItem value="mysql">MySQL</SelectItem>
-                        <SelectItem value="sqlite">SQLite</SelectItem>
+                        {languages.map((language) => (
+                          <SelectItem key={language} value={language}>
+                            {language}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItem>
