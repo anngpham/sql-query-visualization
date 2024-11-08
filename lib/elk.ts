@@ -20,7 +20,9 @@ const DEFAULT_NODE_HEIGHT = 30;
 export class Node {
   id!: string;
   data!: { label: string };
+  detail?: string;
   children?: Node[] | undefined;
+  type!: string;
 }
 
 export class Edge {
@@ -124,8 +126,11 @@ export const toFlowEdge = (elkEdge: ElkExtendedEdge): FlowEdge => {
     source: elkEdge.sources[0],
     target: elkEdge.targets[0],
     // type: "smoothstep",
+    style: { stroke: "#FF0072", strokeWidth: 1 },
+    animated: true,
     markerEnd: {
       type: MarkerType.ArrowClosed,
+      color: "#FF0072",
     },
     zIndex: 1001,
   };

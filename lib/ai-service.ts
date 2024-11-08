@@ -4,79 +4,40 @@ import { generateObject } from "ai";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-// Visualize column impact and data lineage to track columns across transformations by analyzing SQL query.
-
-const userInput = `
-        SELECT 
-            o.order_id,
-            o.order_date,
-            o.quantity,
-            o.total_price,
-            p.product_id,
-            p.product_name,
-            p.price AS product_price,
-            s.shipment_id,
-            s.shipment_date,
-            s.status AS shipment_status
-        FROM 
-            orders o
-        JOIN 
-            products p ON o.product_id = p.product_id
-        JOIN 
-            shipments s ON o.shipment_id = s.shipment_id
-        ORDER BY 
-            o.order_date DESC;
-        `;
-
-const userInput2 = `
-    SELECT e.employee_id, e.first_name, e.last_name, d.department_name, p.project_name, e.salary
-    FROM employees e
-    JOIN departments d ON e.department_id = d.department_id
-    JOIN projects p ON e.employee_id = p.employee_id
-    WHERE d.department_name = 'Sales'
-    ORDER BY e.salary DESC;
-`;
-
-const userInput3 = `
-    SELECT 
-        e.employee_id,
-        e.first_name,
-        e.last_name,
-        d.department_name,
-        p.project_name,
-        ep.role,
-        s.base_salary + s.bonus AS total_compensation
-    FROM 
-        employees e
-    JOIN 
-        departments d ON e.department_id = d.department_id
-    JOIN 
-        employee_projects ep ON e.employee_id = ep.employee_id
-    JOIN 
-        projects p ON ep.project_id = p.project_id
-    JOIN 
-        salaries s ON e.employee_id = s.employee_id
-    WHERE 
-        d.department_name = 'Engineering'
-    ORDER BY 
-        total_compensation DESC;
-    `;
-
-const language = "postgresql";
-
 export async function getVisualizationData(sqlQuery: string, language: string) {
   const baseNodeSchema = z.object({
-    id: z
-      .string()
-      // .default(() => uuidv4())
-      .describe("Id of node, format UUIDv4"),
-    data: z.object({
-      label: z
-        .string()
-        .describe(
-          "With table label is label name, with property label is column name. With result table label is result"
-        ),
-    }),
+    result: z
+      .array(
+        z.object({
+          name: z
+            .string()
+            .describe("Name of the result field, e.g. 'total_compensation'"),
+          value: z
+            .array(z.string())
+            .describe(
+              "Source fields that contribute to this result, e.g. ['salaries.base_salary', 'salaries.bonus']"
+            ),
+          detail: z
+            .string()
+            .optional()
+            .describe(
+              "Optional expression showing how the result is calculated, e.g. 'base_salary + bonus'"
+            ),
+        })
+      )
+      .describe("Array of result fields in the query output"),
+    tables: z
+      .array(
+        z.object({
+          name: z
+            .string()
+            .describe("Name of the source table, e.g. 'employees'"),
+          columns: z
+            .array(z.string())
+            .describe("Names of columns from this table used in the query"),
+        })
+      )
+      .describe("Array of source tables and their relevant columns"),
   });
 
   type Node = z.infer<typeof baseNodeSchema> & {

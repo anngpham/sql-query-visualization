@@ -6,13 +6,15 @@ import {
   Controls,
   Edge as FlowEdge,
   Node as FlowNode,
+  MiniMap,
+  NodeTypes,
   OnEdgesChange,
   OnNodesChange,
   Position,
   ReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   buildGraph,
@@ -20,8 +22,11 @@ import {
   graphToFlow,
   layoutGraph,
   Node,
-} from "@/app/_libs/elk";
-// import { data3 } from "../_libs/data";
+  nodeDataToMap,
+} from "@/lib/elk";
+import TableNode from "./ui/nodes/table-node";
+import ColumnNode from "./ui/nodes/column-node";
+import ResultNode from "./ui/nodes/result-node";
 
 export default function Visualization({
   data,
@@ -31,9 +36,11 @@ export default function Visualization({
   const [nodes, setNodes] = useState<FlowNode[]>([]);
   const [edges, setEdges] = useState<FlowEdge[]>([]);
 
+  // nodes[0].selected
+
   const getLayoutedFlow = async () => {
     // Build a map of node id to node (for quick lookup later)
-    // const nodeDataTable = nodeDataToMap(data3.nodes);
+    const nodeDataTable = nodeDataToMap(data.nodes);
 
     // Build a graph from nodes and edges, return the root node
     const graph = buildGraph(data.nodes, data.edges);
@@ -47,7 +54,11 @@ export default function Visualization({
     const result = graphToFlow(layoutedGraph);
 
     result.nodes.forEach((node) => {
-      node.data = { ...node.data };
+      node.type = nodeDataTable[node.id].type;
+      node.data = {
+        ...node.data,
+        detail: nodeDataTable[node.id].detail,
+      };
       node.extent = node.parentId ? "parent" : undefined;
       node.targetPosition = Position.Left;
       node.sourcePosition = Position.Right;
@@ -70,6 +81,15 @@ export default function Visualization({
     []
   );
 
+  const nodeTypes: NodeTypes = useMemo(
+    () => ({
+      table: TableNode,
+      column: ColumnNode,
+      result: ResultNode,
+    }),
+    []
+  );
+
   return (
     <div style={{ height: "100vh" }}>
       <ReactFlow
@@ -77,10 +97,12 @@ export default function Visualization({
         onNodesChange={onNodesChange}
         edges={edges}
         onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
         fitView
       >
         <Background />
         <Controls />
+        <MiniMap />
       </ReactFlow>
     </div>
   );
